@@ -3,7 +3,7 @@ from . import XmlDocumentation
 
 
 class FunctionXmlDocumentation(XmlDocumentation):
-    def __init__(self, summary: str, path: str, returns: str, arguments: dict):
+    def __init__(self, summary: str, returns: str, arguments: dict, path: str):
         super().__init__(summary, path, EntityType.FUNCTION)
 
         self.returns = returns

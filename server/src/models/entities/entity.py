@@ -1,3 +1,5 @@
+import re
+
 from ..types import EntityType
 from ..xml_documentations import XmlDocumentation
 
@@ -16,8 +18,19 @@ class Entity:
             {self.text}
         '''
 
+    def build_text(self):
+        return self.text
+
     @staticmethod
     def _build_path(parent_path: str, name: str) -> str:
         path_chunks = [parent_path, name]
         filtered_path_chunks = [chunk for chunk in path_chunks if chunk]
         return '.'.join(filtered_path_chunks)
+
+    @staticmethod
+    def extract_entity_link(text: str) -> str | None:
+        entity_link = re.search(r'<entity>([\w.]+)</entity>', text)
+        return entity_link.group(1) if entity_link is not None else None
+
+    def link_entity(self) -> str:
+        return f'<entity>{self.path}</entity>'

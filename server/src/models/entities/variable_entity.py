@@ -9,7 +9,7 @@ class VariableEntity(Entity):
         \s*
         (?P<access_modifier>{AccessModifiers.union('|')})?\s*
         (?P<modifiers>({Modifiers.union()})*)
-        (?P<value_type>({ValueTypes.union('|')}|[A-Z]\w*)([\[\]]*|(<\w+>)))\s+
+        (?P<value_type>({ValueTypes.union('|')}|[A-Z]\w*)([\,\[\]]*|(<\w+>)))\s+
         (?P<name>\w+)\s*
         ((=\s*)(?P<init_value>([^;]*)))?\s*
     """

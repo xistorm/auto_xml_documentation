@@ -9,11 +9,11 @@ class FunctionEntity(Entity):
         \s*
         (?P<access_modifier>{AccessModifiers.union('|')})?\s*
         (?P<modifiers>({Modifiers.union()})*)
-        (?P<return_value_type>[\w<>\[\]]+)\s+
+        (?P<return_value_type>[\w<>\[\]]+)?\s+
         (?P<name>\w+)\s*
         (\((?P<arguments>[^)]*)\))
         (\n|\s)*
-        ({{(?P<body>.*)}}?)?
+        (((?P<body>({{.*}})|(\s*=>\s*.*;))?))?
     """
 
     def __init__(self, text: str, path: str = None):

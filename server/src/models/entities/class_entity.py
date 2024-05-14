@@ -18,9 +18,12 @@ class ClassEntity(Entity):
     def __init__(self, text: str):
         tokens = self._extract_tokens(text)
 
+        text = tokens['text']
         self.access_modifier = tokens['access_modifier']
         self.modifiers = tokens['modifiers']
         self.name = tokens['name']
+        self.inheritance = tokens['inheritance']
+        self.body = tokens['body']
         self.fields = tokens['fields']
         self.methods = tokens['methods']
 
@@ -35,6 +38,26 @@ class ClassEntity(Entity):
             'methods': {self.methods},
         }}'''
 
+    def entities(self):
+        return self.fields + self.methods
+
+    def build_text(self):
+        lines = self.text.split('\n')
+        processed_lines = []
+        for line in lines:
+            entity_link = Entity.extract_entity_link(line)
+            if entity_link is not None:
+                entity = next(entity for entity in self.entities() if entity.path == entity_link)
+                processed_lines.append(entity.text)
+
+                continue
+
+            processed_lines.append(line)
+
+        processed_text = '\n'.join(processed_lines)
+
+        return processed_text
+
     def _extract_tokens(self, text: str) -> dict:
         match = re.search(self._pattern, text, re.VERBOSE | re.DOTALL)
 
@@ -44,16 +67,20 @@ class ClassEntity(Entity):
         tokens['fields'] = []
         tokens['methods'] = []
 
-        body_lines = [line for line in tokens['body'].split('\n') if line]
-        lines_amount = len(body_lines)
+        lines = [line for line in text.split('\n') if line]
+        lines_amount = len(lines)
         index = -1
+        processed_lines = []
         while index + 1 < lines_amount:
             index += 1
-            line = body_lines[index]
+            line = lines[index]
 
             if FunctionEntity.is_function_text(line):
-                function_text, steps = read_code_block(body_lines, index)
+                function_text, steps = read_code_block(lines, index)
                 function_entity = FunctionEntity(function_text, tokens['name'])
+                function_entity_link = function_entity.link_entity()
+
+                processed_lines.append(function_entity_link)
                 tokens['methods'].append(function_entity)
 
                 index += steps
@@ -61,11 +88,17 @@ class ClassEntity(Entity):
 
             if VariableEntity.is_variable_text(line):
                 field_entity = VariableEntity(line, tokens['name'])
+                field_entity_link = field_entity.link_entity()
+
+                processed_lines.append(field_entity_link)
                 tokens['fields'].append(field_entity)
 
                 continue
 
-        del tokens['body']
+            processed_lines.append(line)
+
+        processed_text = '\n'.join(processed_lines)
+        tokens['text'] = processed_text
 
         return tokens
 

@@ -8,8 +8,8 @@ def read_code_block(lines: List[str], start_index: int = 0) -> Tuple[str, int]:
     block_lines = [line]
 
     if '{' in line or next_line.strip(' \n') == '{':
-        opened_brackets = 1 if '{' in line else 0
-        while index + 1 < len(lines):
+        opened_brackets = line.count('{') - line.count('}') + next_line.count('{') - next_line.count('}')
+        while opened_brackets != 0:
             index += 1
             current_line = lines[index]
             block_lines.append(current_line)

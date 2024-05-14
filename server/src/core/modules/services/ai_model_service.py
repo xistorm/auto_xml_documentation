@@ -3,16 +3,16 @@
 class AIModelService:
     @staticmethod
     def translate_natural_language(text: str) -> str:
-        return ''
+        return 'перевод1'
 
     @staticmethod
     def translate_code_language(text: str) -> str:
-        return ''
+        return 'перевод2'
 
     @staticmethod
     def classify_code_block(text: str) -> str:
-        return ''
+        return 'классификация'
 
     @staticmethod
     def summarize_code_block(text: str) -> str:
-        return ''
+        return 'суммаризация'

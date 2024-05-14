@@ -23,10 +23,10 @@ class StaticAnalyzerService:
 
         processed_lines = []
         for line in lines:
-            entity_path = StaticAnalyzerService.__extract_entity_link(line)
+            entity_path = Entity.extract_entity_link(line)
             if entity_path is not None:
                 entity = next(entity for entity in entities if entity.path == entity_path)
-                processed_lines.append(entity.text)
+                processed_lines.append(entity.build_text())
                 continue
 
             processed_lines.append(line)
@@ -53,7 +53,7 @@ class StaticAnalyzerService:
                 class_entity = ClassEntity(class_text)
                 entities.append(class_entity)
 
-                entity_link = StaticAnalyzerService.__link_entity(class_entity)
+                entity_link = class_entity.link_entity()
                 processed_lines.append(entity_link)
 
                 index += steps
@@ -64,7 +64,7 @@ class StaticAnalyzerService:
                 function_entity = FunctionEntity(function_text)
                 entities.append(function_entity)
 
-                entity_link = StaticAnalyzerService.__link_entity(function_entity)
+                entity_link = function_entity.link_entity()
                 processed_lines.append(entity_link)
 
                 index += steps
@@ -74,7 +74,7 @@ class StaticAnalyzerService:
                 variable_entity = VariableEntity(line)
                 entities.append(variable_entity)
 
-                entity_link = StaticAnalyzerService.__link_entity(variable_entity)
+                entity_link = variable_entity.link_entity()
                 processed_lines.append(entity_link)
 
                 continue
@@ -83,12 +83,3 @@ class StaticAnalyzerService:
 
         processed_code = '\n'.join(processed_lines)
         return processed_code, entities
-
-    @staticmethod
-    def __extract_entity_link(text: str) -> str | None:
-        entity_link = re.search(r'<entity>([\w.]+)</entity>', text)
-        return entity_link.group(1) if entity_link is not None else None
-
-    @staticmethod
-    def __link_entity(entity: Entity) -> str:
-        return f'<entity>{entity.path}</entity>'

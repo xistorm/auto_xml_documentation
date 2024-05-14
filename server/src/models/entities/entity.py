@@ -11,12 +11,12 @@ class Entity:
         self.path = path
 
     def add_xml_documentation(self, xml_documentation: XmlDocumentation) -> None:
-        xml_documentation_text = xml_documentation.build_documentation_text()
+        first_line = self.text.split('\n')[0]
+        text_pad = len(first_line) - len(first_line.lstrip())
+        xml_documentation_text = xml_documentation.build_documentation_text(text_pad)
 
-        self.text = f'''
-            {xml_documentation_text}
-            {self.text}
-        '''
+        documented_text = '\n'.join(['', xml_documentation_text, self.text])
+        self.text = documented_text
 
     def build_text(self):
         return self.text

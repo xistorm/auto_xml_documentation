@@ -9,9 +9,12 @@ class FunctionXmlDocumentation(XmlDocumentation):
         self.returns = returns
         self.arguments = arguments
 
-    def build_documentation_text(self) -> str:
-        summary = XmlDocumentation._build_summary(self.summary)
-        arguments = XmlDocumentation._build_arguments(self.arguments)
-        return_type = XmlDocumentation._build_return_type(self.returns)
+    def build_documentation_text(self, pad: int = 0) -> str:
+        documentations = [
+            XmlDocumentation._build_summary(self.summary, pad),
+            XmlDocumentation._build_arguments(self.arguments, pad),
+            XmlDocumentation._build_return_type(self.returns, pad),
+        ]
+        filtered_documentations = [documentation for documentation in documentations if documentation]
 
-        return "\n".join([summary, arguments, return_type])
+        return "\n".join(filtered_documentations)

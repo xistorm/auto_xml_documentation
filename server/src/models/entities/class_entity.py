@@ -59,7 +59,7 @@ class ClassEntity(Entity):
 
         tokens = match.groupdict()
         tokens['modifiers'] = [modifier for modifier in tokens['modifiers'].split(' ') if modifier]
-        tokens['inheritance'] = re.sub(r'\s|\n', '', tokens['inheritance']).split(',') if tokens['inheritance'] else None
+        tokens['inheritance'] = re.sub(r'\s|\n', '', tokens['inheritance']).split(',') if tokens['inheritance'] else []
         tokens['fields'] = []
         tokens['methods'] = []
 

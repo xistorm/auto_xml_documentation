@@ -8,8 +8,8 @@ from . import XmlDocumentation
 
 class VariableXmlDocumentation(XmlDocumentation):
     def __init__(self, entity: VariableEntity, summary: str):
-        modifiers = [str(modifier) for modifier in entity.modifiers]
-        additional_line = f'{" ".join(modifiers)} variable of {entity.value_type} type'
+        modifiers = " ".join([str(modifier) for modifier in entity.modifiers])
+        additional_line = f'{modifiers} variable of {entity.value_type} type'
 
         extended_summary = XmlDocumentation._enrich_summary(summary, additional_line)
 

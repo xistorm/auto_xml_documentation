@@ -3,15 +3,15 @@ import uuid
 
 from typing import List
 
-from ..types import EntityType, AccessModifiers, Modifiers
+from ..types import EntityType, AccessModifiers
 from ..xml_documentations import XmlDocumentation
 
 
 class Entity:
-    def __init__(self, entity_type: EntityType, name: str, text: str, access_modifier: AccessModifiers = AccessModifiers.PRIVATE, modifiers: List[Modifiers] = []):
+    def __init__(self, entity_type: EntityType, name: str, text: str, access_modifier: str | None, modifiers: List[str] | None):
         self.type = entity_type
-        self.access_modifier = access_modifier
-        self.modifiers = modifiers
+        self.access_modifier = access_modifier if access_modifier is not None else AccessModifiers.PRIVATE.value
+        self.modifiers = modifiers if modifiers is not None else []
         self.name = name
         self.text = text
         self.id = str(uuid.uuid4())

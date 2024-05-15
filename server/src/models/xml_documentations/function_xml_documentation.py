@@ -8,9 +8,9 @@ from . import XmlDocumentation
 
 class FunctionXmlDocumentation(XmlDocumentation):
     def __init__(self, entity: FunctionEntity, summary: str, returns: str | None = None, arguments: dict | None = None):
-        modifiers = [str(modifier) for modifier in entity.modifiers]
-        arguments_names = [argument.name for argument in entity.arguments] if len(entity.arguments) > 0 else []
-        additional_line = f'{" ".join(modifiers)} function which processing {", ".join(arguments_names)} to get {entity.return_value_type} value'
+        modifiers = " ".join([str(modifier) for modifier in entity.modifiers])
+        arguments_names = ", ".join([argument.name for argument in entity.arguments])
+        additional_line = f'{modifiers} function which processing ({arguments_names}) to get {entity.return_value_type} value'
 
         extended_summary = XmlDocumentation._enrich_summary(summary, additional_line)
 

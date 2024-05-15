@@ -26,9 +26,7 @@ class FunctionEntity(Entity):
         self.arguments = tokens['arguments']
         self.body = tokens['body']
 
-        path = Entity._build_path(path, self.name)
-
-        super().__init__(path, text, EntityType.FUNCTION)
+        super().__init__(text, EntityType.FUNCTION)
 
     def __repr__(self):
         return f'''{{
@@ -46,7 +44,7 @@ class FunctionEntity(Entity):
 
         tokens = match.groupdict()
         tokens['modifiers'] = [modifier for modifier in tokens['modifiers'].split(' ') if modifier]
-        tokens['arguments'] = [VariableEntity(argument, tokens['name']) for argument in tokens['arguments'].split(', ') if argument]
+        tokens['arguments'] = [VariableEntity(argument) for argument in tokens['arguments'].split(', ') if argument]
 
         return tokens
 

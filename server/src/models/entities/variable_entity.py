@@ -14,7 +14,7 @@ class VariableEntity(Entity):
         ((=\s*)(?P<init_value>([^;]*)))?\s*
     """
 
-    def __init__(self, text: str, path: str = None):
+    def __init__(self, text: str):
         tokens = VariableEntity._extract_tokens(text)
 
         self.name = tokens['name']
@@ -23,9 +23,7 @@ class VariableEntity(Entity):
         self.modifiers = tokens['modifiers']
         self.init_value = tokens['init_value']
 
-        path = Entity._build_path(path, self.name)
-
-        super().__init__(path, text, EntityType.VARIABLE)
+        super().__init__(text, EntityType.VARIABLE)
 
     def __repr__(self):
         return f'''{{

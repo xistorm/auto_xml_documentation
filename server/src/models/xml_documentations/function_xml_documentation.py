@@ -3,8 +3,8 @@ from . import XmlDocumentation
 
 
 class FunctionXmlDocumentation(XmlDocumentation):
-    def __init__(self, summary: str, returns: str, arguments: dict, path: str):
-        super().__init__(summary, path, EntityType.FUNCTION)
+    def __init__(self, entity_id: str, summary: str, returns: str, arguments: dict):
+        super().__init__(entity_id, EntityType.FUNCTION, summary)
 
         self.returns = returns
         self.arguments = arguments

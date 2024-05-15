@@ -24,7 +24,7 @@ class DocumentationService:
     @staticmethod
     def _build_variable_xml_documentation(entity: VariableEntity) -> VariableXmlDocumentation:
         summary = AIModelService.summarize_code_block(entity.text)
-        documentation = VariableXmlDocumentation(summary, entity.path)
+        documentation = VariableXmlDocumentation(entity.id, summary)
 
         return documentation
 
@@ -36,14 +36,14 @@ class DocumentationService:
         for argument in entity.arguments:
             arguments[argument.name] = AIModelService.summarize_code_block(argument.text)
 
-        documentation = FunctionXmlDocumentation(summary, returns, arguments, entity.path)
+        documentation = FunctionXmlDocumentation(entity.id, summary, returns, arguments)
 
         return documentation
 
     @staticmethod
     def _build_class_xml_documentation(entity: ClassEntity) -> ClassXmlDocumentation:
         summary = AIModelService.summarize_code_block(entity.text)
-        documentation = ClassXmlDocumentation(summary, entity.path)
+        documentation = ClassXmlDocumentation(entity.id, summary)
 
         for field in entity.entities():
             DocumentationService.build_documented_entity(field)

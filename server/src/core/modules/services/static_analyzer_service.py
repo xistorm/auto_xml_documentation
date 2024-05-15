@@ -23,9 +23,9 @@ class StaticAnalyzerService:
 
         processed_lines = []
         for line in lines:
-            entity_path = Entity.extract_entity_link(line)
-            if entity_path is not None:
-                entity = next(entity for entity in entities if entity.path == entity_path)
+            entity_link = Entity.extract_entity_link(line)
+            if entity_link is not None:
+                entity = next(entity for entity in entities if entity.id == entity_link)
                 processed_lines.append(entity.build_text())
                 continue
 
@@ -33,8 +33,6 @@ class StaticAnalyzerService:
 
         processed_code = '\n'.join(processed_lines)
         return processed_code
-
-
 
     @staticmethod
     def __destruct_code(code: str) -> Tuple[str, List[Entity]]:

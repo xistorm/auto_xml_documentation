@@ -2,10 +2,10 @@ from ..types import EntityType
 
 
 class XmlDocumentation:
-    def __init__(self, summary: str, path: str, entity_type: EntityType):
+    def __init__(self, entity_id: str, entity_type: EntityType, summary: str):
         self.summary = summary
-        self.path = path
-        self.type = entity_type
+        self.entity_id = entity_id
+        self.entity_type = entity_type
 
     @staticmethod
     def _build_xml_tag(tag: str, content: str, attributes: dict = None, pad: int = 0, extended: bool = True):

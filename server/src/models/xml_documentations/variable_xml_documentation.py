@@ -3,5 +3,5 @@ from . import XmlDocumentation
 
 
 class VariableXmlDocumentation(XmlDocumentation):
-    def __init__(self, summary: str, path: str):
-        super().__init__(summary, path, EntityType.VARIABLE)
+    def __init__(self, entity_id: str, summary: str):
+        super().__init__(entity_id, EntityType.VARIABLE, summary)

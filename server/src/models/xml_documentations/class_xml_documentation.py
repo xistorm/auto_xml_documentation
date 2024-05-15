@@ -3,5 +3,5 @@ from . import XmlDocumentation
 
 
 class ClassXmlDocumentation(XmlDocumentation):
-    def __init__(self, summary: str, path: str):
-        super().__init__(summary, path, EntityType.CLASS)
+    def __init__(self, entity_id: str, summary: str):
+        super().__init__(entity_id, EntityType.CLASS, summary)

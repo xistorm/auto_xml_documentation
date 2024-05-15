@@ -27,7 +27,7 @@ class ClassEntity(Entity):
         self.fields = tokens['fields']
         self.methods = tokens['methods']
 
-        super().__init__(self.name, text, EntityType.CLASS)
+        super().__init__(text, EntityType.CLASS)
 
     def __repr__(self):
         return f'''{{
@@ -47,7 +47,7 @@ class ClassEntity(Entity):
         for line in lines:
             entity_link = Entity.extract_entity_link(line)
             if entity_link is not None:
-                entity = next(entity for entity in self.entities() if entity.path == entity_link)
+                entity = next(entity for entity in self.entities() if entity.id == entity_link)
                 processed_lines.append(entity.text)
 
                 continue
@@ -87,7 +87,7 @@ class ClassEntity(Entity):
                 continue
 
             if VariableEntity.is_variable_text(line):
-                field_entity = VariableEntity(line, tokens['name'])
+                field_entity = VariableEntity(line)
                 field_entity_link = field_entity.link_entity()
 
                 processed_lines.append(field_entity_link)

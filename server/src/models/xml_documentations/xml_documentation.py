@@ -1,20 +1,38 @@
-from ..types import EntityType
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..entities import Entity
+
+from ..types import AccessModifiers
 
 
 class XmlDocumentation:
-    def __init__(self, entity_id: str, entity_type: EntityType, summary: str):
+    def __init__(self, entity: Entity, summary: str):
+        self.entity_id = entity.id
+        self.entity_type = entity.type
+        self.permission = AccessModifiers.get_permission(entity.access_modifier)
+        self.modifiers = ','.join([str(modifier) for modifier in entity.modifiers])
         self.summary = summary
-        self.entity_id = entity_id
-        self.entity_type = entity_type
+
+    @staticmethod
+    def _enrich_summary(summary: str, additional: str):
+        separator = '. '
+        extended_summary = separator.join([summary, additional])
+        summary_lines = extended_summary.split(separator)
+        processed_lines = [line.strip().capitalize() for line in summary_lines]
+        formatted_summary = separator.join(processed_lines)
+
+        return formatted_summary
 
     @staticmethod
     def _build_xml_tag(tag: str, content: str, attributes: dict = None, pad: int = 0, extended: bool = True):
         prefix = f'{" " * pad}/// '
         parsed_attributes = [f'{name}="{value}"' for name, value in attributes.items()] if attributes is not None else []
         processed_attributes = " ".join(parsed_attributes)
+        processed_content = content.replace('. ', '\n') if extended else content.replace('\n', '. ')
         lines = [
             f'<{tag} {processed_attributes}>',
-            content,
+            *processed_content.split('\n'),
             f'</{tag}>',
         ]
 
@@ -41,5 +59,17 @@ class XmlDocumentation:
     def _build_return_type(summary: str, pad: int = 0) -> str:
         return XmlDocumentation._build_xml_tag('returns', summary, pad=pad, extended=False)
 
+    @staticmethod
+    def _build_permission(permission: str, pad: int = 0) -> str:
+        return XmlDocumentation._build_xml_tag('permission', permission, pad=pad, extended=False)
+
+    @staticmethod
+    def _build_modifiers(modifiers: str, pad: int = 0) -> str:
+        return XmlDocumentation._build_xml_tag('modifiers', modifiers, pad=pad, extended=False)
+
     def build_documentation_text(self, pad: int = 0) -> str:
-        return XmlDocumentation._build_summary(self.summary, pad)
+        return '\n'.join([
+            XmlDocumentation._build_permission(self.permission, pad),
+            XmlDocumentation._build_modifiers(self.modifiers, pad),
+            XmlDocumentation._build_summary(self.summary, pad),
+        ])

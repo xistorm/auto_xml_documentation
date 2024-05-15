@@ -1,13 +1,18 @@
 import re
 import uuid
 
-from ..types import EntityType
+from typing import List
+
+from ..types import EntityType, AccessModifiers, Modifiers
 from ..xml_documentations import XmlDocumentation
 
 
 class Entity:
-    def __init__(self, text: str, entity_type: EntityType):
+    def __init__(self, entity_type: EntityType, name: str, text: str, access_modifier: AccessModifiers = AccessModifiers.PRIVATE, modifiers: List[Modifiers] = []):
         self.type = entity_type
+        self.access_modifier = access_modifier
+        self.modifiers = modifiers
+        self.name = name
         self.text = text
         self.id = str(uuid.uuid4())
 

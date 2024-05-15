@@ -18,16 +18,12 @@ class ClassEntity(Entity):
     def __init__(self, text: str):
         tokens = self._extract_tokens(text)
 
-        text = tokens['text']
-        self.access_modifier = tokens['access_modifier']
-        self.modifiers = tokens['modifiers']
-        self.name = tokens['name']
         self.inheritance = tokens['inheritance']
         self.body = tokens['body']
         self.fields = tokens['fields']
         self.methods = tokens['methods']
 
-        super().__init__(text, EntityType.CLASS)
+        super().__init__(EntityType.CLASS, tokens['name'], tokens['text'], tokens['access_modifier'], tokens['modifiers'])
 
     def __repr__(self):
         return f'''{{
@@ -77,7 +73,7 @@ class ClassEntity(Entity):
 
             if FunctionEntity.is_function_text(line):
                 function_text, steps = read_code_block(lines, index)
-                function_entity = FunctionEntity(function_text, tokens['name'])
+                function_entity = FunctionEntity(function_text)
                 function_entity_link = function_entity.link_entity()
 
                 processed_lines.append(function_entity_link)

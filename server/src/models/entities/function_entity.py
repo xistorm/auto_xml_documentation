@@ -16,17 +16,14 @@ class FunctionEntity(Entity):
         (((?P<body>({{.*}})|(\s*=>\s*.*;))?))?
     """
 
-    def __init__(self, text: str, path: str = None):
+    def __init__(self, text: str):
         tokens = self._extract_tokens(text)
 
-        self.access_modifier = tokens['access_modifier']
-        self.modifiers = tokens['modifiers']
         self.return_value_type = tokens['return_value_type']
-        self.name = tokens['name']
         self.arguments = tokens['arguments']
         self.body = tokens['body']
 
-        super().__init__(text, EntityType.FUNCTION)
+        super().__init__(EntityType.FUNCTION, tokens['name'], text, tokens['access_modifier'], tokens['modifiers'])
 
     def __repr__(self):
         return f'''{{

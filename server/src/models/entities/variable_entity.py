@@ -17,13 +17,10 @@ class VariableEntity(Entity):
     def __init__(self, text: str):
         tokens = VariableEntity._extract_tokens(text)
 
-        self.name = tokens['name']
         self.value_type = tokens['value_type']
-        self.access_modifier = tokens['access_modifier']
-        self.modifiers = tokens['modifiers']
         self.init_value = tokens['init_value']
 
-        super().__init__(text, EntityType.VARIABLE)
+        super().__init__(EntityType.VARIABLE, tokens['name'], text, tokens['access_modifier'], tokens['modifiers'])
 
     def __repr__(self):
         return f'''{{

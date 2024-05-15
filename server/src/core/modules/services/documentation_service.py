@@ -1,7 +1,11 @@
+from src.utils.string import split_camel_case
+
+from src.models.types import AccessModifiers
 from src.models.entities import Entity, VariableEntity, FunctionEntity, ClassEntity
 from src.models.xml_documentations import XmlDocumentation, VariableXmlDocumentation, FunctionXmlDocumentation, ClassXmlDocumentation
 
-from .ai_model_service import AIModelService
+from .translation_service import TranslationService
+from .summarization_service import SummarizationService
 
 
 class DocumentationService:
@@ -23,27 +27,27 @@ class DocumentationService:
 
     @staticmethod
     def _build_variable_xml_documentation(entity: VariableEntity) -> VariableXmlDocumentation:
-        summary = AIModelService.summarize_code_block(entity.text)
-        documentation = VariableXmlDocumentation(entity.id, summary)
+        summary = SummarizationService.summarize_code(entity.text)
+        documentation = VariableXmlDocumentation(entity, summary)
 
         return documentation
 
     @staticmethod
     def _build_function_xml_documentation(entity: FunctionEntity) -> FunctionXmlDocumentation:
-        summary = AIModelService.summarize_code_block(entity.body)
-        returns = AIModelService.summarize_code_block(entity.text)
+        summary = SummarizationService.summarize_code(entity.text)
         arguments = dict()
         for argument in entity.arguments:
-            arguments[argument.name] = AIModelService.summarize_code_block(argument.text)
+            parsed_name = split_camel_case(argument.name)
+            arguments[argument.name] = SummarizationService.summarize_code(parsed_name)
 
-        documentation = FunctionXmlDocumentation(entity.id, summary, returns, arguments)
+        documentation = FunctionXmlDocumentation(entity, summary=summary, arguments=arguments)
 
         return documentation
 
     @staticmethod
     def _build_class_xml_documentation(entity: ClassEntity) -> ClassXmlDocumentation:
-        summary = AIModelService.summarize_code_block(entity.text)
-        documentation = ClassXmlDocumentation(entity.id, summary)
+        summary = SummarizationService.summarize_code(entity.text)
+        documentation = ClassXmlDocumentation(entity, summary)
 
         for field in entity.entities():
             DocumentationService.build_documented_entity(field)

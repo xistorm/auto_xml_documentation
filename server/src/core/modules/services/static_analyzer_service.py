@@ -4,6 +4,7 @@ from typing import List, Tuple
 
 from src.utils.code import read_code_block
 from src.models.entities import Entity, ClassEntity, FunctionEntity, VariableEntity
+from src.models.xml_documentations import XmlDocumentation
 
 from .documentation_service import DocumentationService
 
@@ -29,7 +30,8 @@ class StaticAnalyzerService:
                 processed_lines.append(entity.build_text())
                 continue
 
-            processed_lines.append(line)
+            if not XmlDocumentation.is_documentation_text(line):
+                processed_lines.append(line)
 
         processed_code = '\n'.join(processed_lines)
         return processed_code

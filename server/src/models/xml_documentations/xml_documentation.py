@@ -79,3 +79,7 @@ class XmlDocumentation:
             XmlDocumentation._build_modifiers(self.modifiers, pad),
             XmlDocumentation._build_summary(self.summary, pad),
         ])
+
+    @staticmethod
+    def is_documentation_text(text: str) -> bool:
+        return re.search(r'\s*///.*', text, re.DOTALL) is not None

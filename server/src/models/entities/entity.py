@@ -15,17 +15,28 @@ class Entity:
         self.name = name
         self.text = text
         self.id = str(uuid.uuid4())
+        self.documentation = ''
 
-    def add_xml_documentation(self, xml_documentation: XmlDocumentation) -> None:
+    def add_xml_documentation(self, xml_documentation: XmlDocumentation) -> str:
         first_line = self.text.split('\n')[0]
         text_pad = len(first_line) - len(first_line.lstrip())
-        xml_documentation_text = xml_documentation.build_documentation_text(text_pad)
 
-        documented_text = '\n'.join(['', xml_documentation_text, self.text])
-        self.text = documented_text
+        xml_documentation_text = xml_documentation.build_documentation_text(text_pad)
+        self.documentation = xml_documentation_text
+
+        return xml_documentation_text
+
+    def add_xml_documentation_text(self, xml_documentation_text: str) -> None:
+        self.documentation = xml_documentation_text
+
+        return
+
+    def get_documented_text(self) -> str:
+        documented_text = '\n'.join(['', self.documentation, self.text])
+        return documented_text
 
     def build_text(self):
-        return self.text
+        return self.get_documented_text()
 
     @staticmethod
     def extract_entity_link(text: str) -> str | None:

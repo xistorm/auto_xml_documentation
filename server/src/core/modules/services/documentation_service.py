@@ -1,18 +1,22 @@
 from src.utils.string import split_camel_case
 
-from src.models.types import AccessModifiers
 from src.models.entities import Entity, VariableEntity, FunctionEntity, ClassEntity
 from src.models.xml_documentations import XmlDocumentation, VariableXmlDocumentation, FunctionXmlDocumentation, ClassXmlDocumentation
 
-from .translation_service import TranslationService
 from .summarization_service import SummarizationService
+from .cache_service import CacheService
 
 
 class DocumentationService:
     @staticmethod
     def build_documented_entity(entity: Entity) -> Entity:
-        documentation = DocumentationService._build_xml_documentation(entity)
-        entity.add_xml_documentation(documentation)
+        if CacheService.has(entity):
+            documentation_text = CacheService.get(entity)
+            entity.add_xml_documentation_text(documentation_text)
+        else:
+            documentation = DocumentationService._build_xml_documentation(entity)
+            documentation_text = entity.add_xml_documentation(documentation)
+            CacheService.add(entity, documentation_text)
 
         return entity
 

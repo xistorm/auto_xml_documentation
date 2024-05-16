@@ -1,5 +1,7 @@
 import re
 
+from typing import List
+
 from src.utils.code import read_code_block
 from src.models.types import EntityType, AccessModifiers, Modifiers
 
@@ -34,17 +36,18 @@ class ClassEntity(Entity):
             'methods': {self.methods},
         }}'''
 
-    def entities(self):
+    def entities(self) -> List[Entity]:
         return self.fields + self.methods
 
     def build_text(self):
-        lines = self.text.split('\n')
+        lines = self.get_documented_text().split('\n')
         processed_lines = []
         for line in lines:
             entity_link = Entity.extract_entity_link(line)
             if entity_link is not None:
                 entity = next(entity for entity in self.entities() if entity.id == entity_link)
-                processed_lines.append(entity.text)
+                documented_entity_text = entity.get_documented_text()
+                processed_lines.append(documented_entity_text)
 
                 continue
 

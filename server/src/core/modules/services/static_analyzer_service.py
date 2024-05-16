@@ -1,6 +1,5 @@
-import re
-
 from typing import List, Tuple
+from concurrent.futures.thread import ThreadPoolExecutor
 
 from src.utils.code import read_code_block
 from src.models.entities import Entity, ClassEntity, FunctionEntity, VariableEntity
@@ -10,10 +9,12 @@ from .documentation_service import DocumentationService
 
 
 class StaticAnalyzerService:
+    thread_pool = ThreadPoolExecutor()
+
     @staticmethod
     def add_xml_documentation(code: str) -> str:
         processed_code, entities = StaticAnalyzerService.__destruct_code(code)
-        documented_entities = [DocumentationService.build_documented_entity(entity) for entity in entities]
+        documented_entities = list(StaticAnalyzerService.thread_pool.map(DocumentationService.build_documented_entity, entities))
         documented_code = StaticAnalyzerService.__struct_code(processed_code, documented_entities)
 
         return documented_code

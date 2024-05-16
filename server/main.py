@@ -1,12 +1,14 @@
 import uvicorn
+import os
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.api import api_router
 
-from src.core.modules.services import StaticAnalyzerService
-from src.models.entities import ClassEntity
+
+load_dotenv()
 
 app = FastAPI()
 app.include_router(api_router, prefix='/api')
@@ -23,5 +25,5 @@ if __name__ == '__main__':
     uvicorn.run(
         'main:app',
         host='0.0.0.0',
-        port=8000,
+        port=os.getenv('PORT', 8000),
     )

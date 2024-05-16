@@ -1,13 +1,14 @@
 from fastapi import APIRouter
 
-from starlette.status import HTTP_200_OK
+from src.models.api import RequestBody
+from src.core.services.static_analyzer_service import StaticAnalyzerService
 
 router = APIRouter()
 
 
-@router.get(
-    '/create',
-    status_code=HTTP_200_OK,
-)
-async def create():
-    pass
+@router.get('/create')
+async def create(request_body: RequestBody):
+    code_text = request_body.code_text
+    documented_code_text = StaticAnalyzerService.add_xml_documentation(code_text)
+
+    return documented_code_text

@@ -1,4 +1,4 @@
-from src.utils.string import split_camel_case
+from src.utils import split_camel_case
 
 from src.models.entities import Entity, VariableEntity, FunctionEntity, ClassEntity
 from src.models.xml_documentations import XmlDocumentation, VariableXmlDocumentation, FunctionXmlDocumentation, ClassXmlDocumentation

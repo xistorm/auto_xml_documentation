@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 
 def read_code_block(lines: List[str], start_index: int = 0) -> Tuple[str, int]:
-    index = start_index
+    index = min(start_index, len(lines) - 1)
     line = lines[index]
     lines_amount = len(lines)
     next_line = lines[index + 1] if index + 1 < lines_amount else ''

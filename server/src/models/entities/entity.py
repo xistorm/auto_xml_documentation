@@ -35,7 +35,7 @@ class Entity:
         documented_text = '\n'.join(['', self.documentation, self.text])
         return documented_text
 
-    def build_text(self):
+    def build_text(self) -> str:
         return self.get_documented_text()
 
     @staticmethod

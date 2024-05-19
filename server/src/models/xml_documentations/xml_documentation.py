@@ -6,7 +6,7 @@ import re
 
 from ..types import AccessModifiers
 
-from src.utils.string import capitalize
+from src.utils import capitalize
 
 
 class XmlDocumentation:
@@ -18,7 +18,7 @@ class XmlDocumentation:
         self.summary = summary
 
     @staticmethod
-    def _enrich_summary(summary: str, additional: str):
+    def _enrich_summary(summary: str, additional: str) -> str:
         separator = '. '
         extended_summary = separator.join([summary.strip(separator), additional])
         summary_lines = extended_summary.split(separator)
@@ -28,7 +28,7 @@ class XmlDocumentation:
         return formatted_summary
 
     @staticmethod
-    def _build_xml_tag(tag: str, content: str, attributes: dict = None, pad: int = 0, extended: bool = True):
+    def _build_xml_tag(tag: str, content: str, attributes: dict = None, pad: int = 0, extended: bool = True) -> str:
         if content is None:
             print(content)
         prefix = f'{" " * pad}/// '
@@ -76,7 +76,6 @@ class XmlDocumentation:
     def build_documentation_text(self, pad: int = 0) -> str:
         return '\n'.join([
             XmlDocumentation._build_permission(self.permission, pad),
-            XmlDocumentation._build_modifiers(self.modifiers, pad),
             XmlDocumentation._build_summary(self.summary, pad),
         ])
 

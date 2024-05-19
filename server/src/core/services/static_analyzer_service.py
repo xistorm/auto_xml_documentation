@@ -1,7 +1,7 @@
 from typing import List, Tuple
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from src.utils.code import read_code_block
+from src.utils import read_code_block
 from src.models.entities import Entity, ClassEntity, FunctionEntity, VariableEntity
 from src.models.xml_documentations import XmlDocumentation
 

@@ -2,7 +2,7 @@ import re
 
 from typing import List
 
-from src.utils.code import read_code_block
+from src.utils import read_code_block
 from src.models.types import EntityType, AccessModifiers, Modifiers
 
 from . import Entity, VariableEntity, FunctionEntity
@@ -39,7 +39,7 @@ class ClassEntity(Entity):
     def entities(self) -> List[Entity]:
         return self.fields + self.methods
 
-    def build_text(self):
+    def build_text(self) -> str:
         lines = self.get_documented_text().split('\n')
         processed_lines = []
         for line in lines:

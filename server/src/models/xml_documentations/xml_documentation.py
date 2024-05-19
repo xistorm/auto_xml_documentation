@@ -81,4 +81,4 @@ class XmlDocumentation:
 
     @staticmethod
     def is_documentation_text(text: str) -> bool:
-        return re.search(r'\s*///.*', text, re.DOTALL) is not None
+        return re.search(r'\s*///\s?<.*', text, re.DOTALL) is not None

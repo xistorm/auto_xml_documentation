@@ -8,16 +8,18 @@ from . import XmlDocumentation
 
 class FunctionXmlDocumentation(XmlDocumentation):
     def __init__(self, entity: FunctionEntity, summary: str, returns: str | None = None, arguments: dict | None = None):
-        modifiers = " ".join([str(modifier) for modifier in entity.modifiers])
-        arguments_names = ", ".join([argument.name for argument in entity.arguments])
-        additional_line = f'{modifiers} function which processing ({arguments_names}) to get {entity.return_value_type} value'
-
-        extended_summary = XmlDocumentation._enrich_summary(summary, additional_line)
-
-        super().__init__(entity, extended_summary)
+        super().__init__(entity, summary)
 
         self.returns = returns
         self.arguments = arguments
+
+    @staticmethod
+    def get_meta(entity: FunctionEntity) -> str:
+        modifiers = " ".join([str(modifier) for modifier in entity.modifiers])
+        arguments_names = ", ".join([argument.name for argument in entity.arguments])
+        meta = f'[{modifiers}] function that processes [({arguments_names})] to get value of type [{entity.return_value_type}]'
+
+        return meta
 
     def build_documentation_text(self, pad: int = 0) -> str:
         documentations = [

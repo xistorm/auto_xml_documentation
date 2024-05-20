@@ -18,7 +18,7 @@ class XmlDocumentation:
         self.summary = summary
 
     @staticmethod
-    def _enrich_summary(summary: str, additional: str) -> str:
+    def enrich_summary(summary: str, additional: str) -> str:
         separator = '. '
         extended_summary = separator.join([summary.strip(separator), additional])
         summary_lines = extended_summary.split(separator)

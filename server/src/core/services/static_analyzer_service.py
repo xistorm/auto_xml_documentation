@@ -12,7 +12,9 @@ class StaticAnalyzerService:
     thread_pool = ThreadPoolExecutor()
 
     @staticmethod
-    def add_xml_documentation(code: str) -> str:
+    def add_xml_documentation(code: str, language: str = 'en') -> str:
+        DocumentationService.language = language
+
         processed_code, entities = StaticAnalyzerService.__destruct_code(code)
         documented_entities = list(StaticAnalyzerService.thread_pool.map(DocumentationService.build_documented_entity, entities))
         documented_code = StaticAnalyzerService.__struct_code(processed_code, documented_entities)

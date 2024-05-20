@@ -8,9 +8,11 @@ from . import XmlDocumentation
 
 class VariableXmlDocumentation(XmlDocumentation):
     def __init__(self, entity: VariableEntity, summary: str):
+        super().__init__(entity, summary)
+
+    @staticmethod
+    def get_meta(entity: VariableEntity) -> str:
         modifiers = " ".join([str(modifier) for modifier in entity.modifiers])
-        additional_line = f'{modifiers} variable of {entity.value_type} type'
+        meta = f'[{modifiers}] variable of type [{entity.value_type}]'
 
-        extended_summary = XmlDocumentation._enrich_summary(summary, additional_line)
-
-        super().__init__(entity, extended_summary)
+        return meta

@@ -6,4 +6,6 @@ def split_camel_case(text: str) -> str:
 
 
 def capitalize(text: str) -> str:
+    if len(text) < 2:
+        return text.upper()
     return text[0].upper() + text[1:]

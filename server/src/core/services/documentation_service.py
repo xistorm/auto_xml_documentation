@@ -1,3 +1,5 @@
+from concurrent.futures.thread import ThreadPoolExecutor
+
 from src.utils import split_camel_case
 
 from src.models.entities import Entity, VariableEntity, FunctionEntity, ClassEntity
@@ -9,6 +11,7 @@ from .cache_service import CacheService
 
 
 class DocumentationService:
+    thread_pool = ThreadPoolExecutor()
     language: str = 'en'
 
     @staticmethod
@@ -64,8 +67,10 @@ class DocumentationService:
         summary = DocumentationService._build_summary_documentation(entity.text, meta)
         documentation = ClassXmlDocumentation(entity, summary)
 
-        for field in entity.entities():
-            DocumentationService.build_documented_entity(field)
+        documented_entities = list(DocumentationService.thread_pool.map(DocumentationService.build_documented_entity, entity.entities()))
+        for entity in entity.entities():
+            xml_documentation_text = next(documented_entity.documentation for documented_entity in documented_entities if documented_entity.id == entity.id)
+            entity.add_xml_documentation_text(xml_documentation_text)
 
         return documentation
 

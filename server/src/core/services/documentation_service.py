@@ -13,13 +13,16 @@ class DocumentationService:
 
     @staticmethod
     def build_documented_entity(entity: Entity) -> Entity:
-        if CacheService.has(entity, DocumentationService.language):
+        cache_available = CacheService.ping()
+
+        if cache_available and CacheService.has(entity, DocumentationService.language):
             documentation_text = CacheService.get(entity, DocumentationService.language)
             entity.add_xml_documentation_text(documentation_text)
         else:
             documentation = DocumentationService._build_xml_documentation(entity)
             documentation_text = entity.add_xml_documentation(documentation)
-            CacheService.add(entity, documentation_text, DocumentationService.language)
+            if cache_available:
+                CacheService.add(entity, documentation_text, DocumentationService.language)
 
         return entity
 

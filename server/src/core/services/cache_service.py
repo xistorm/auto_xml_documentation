@@ -27,6 +27,14 @@ class CacheService:
         return entity_key
 
     @staticmethod
+    def ping() -> bool:
+        try:
+            CacheService.redis.ping()
+            return True
+        except:
+            return False
+
+    @staticmethod
     def get(entity: Entity, language: str) -> str:
         entity_hash = CacheService._get_key(entity, language)
         documentation = CacheService.redis.get(entity_hash)

@@ -12,7 +12,7 @@ export class DocumentationAPI {
         return `http://${this.HOST}:${this.PORT}/api/documentation/${endpoint}`
     };
 
-    static create = async (code_text: string, language: string = 'ru') => {
+    static create = async (code_text: string, language: string) => {
         const url = this.buildUrl('create');
         const data = { code_text, language };
 
